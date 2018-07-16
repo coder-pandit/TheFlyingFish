@@ -36,7 +36,10 @@ class MainActivity : AppCompatActivity() {
         // setContentView to custom created view FlyingFishView
         gameView = FlyingFishView(this, intent, sp)
         setContentView(gameView)
+    }
 
+    override fun onResume() {
+        super.onResume()
         // instantly run the callback
         handler.post(runnable)
     }
