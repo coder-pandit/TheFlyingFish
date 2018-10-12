@@ -1,6 +1,7 @@
 package com.example.kumar.flyingfish
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.animation.Animation
@@ -40,6 +41,22 @@ class SplashActivity : AppCompatActivity() {
         playBtn.setOnClickListener {
             startActivity(Intent(applicationContext, MainActivity::class.java))
             finish()
+        }
+
+        if (sp.getBoolean("soundOn", true)) {
+            soundSetting.setImageResource(R.drawable.ic_sound_on)
+        } else {
+            soundSetting.setImageResource(R.drawable.ic_sound_off)
+        }
+
+        soundSetting.setOnClickListener {
+            if (sp.getBoolean("soundOn", true)) {
+                sp.edit().putBoolean("soundOn", false).apply()
+                soundSetting.setImageResource(R.drawable.ic_sound_off)
+            } else {
+                sp.edit().putBoolean("soundOn", true).apply()
+                soundSetting.setImageResource(R.drawable.ic_sound_on)
+            }
         }
     }
 }

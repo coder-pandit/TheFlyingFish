@@ -1,6 +1,7 @@
 package com.example.kumar.flyingfish
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
@@ -10,6 +11,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var gameView: FlyingFishView
     private val handler = Handler()
     private lateinit var runnable: Runnable
+    private var player: MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,18 +38,27 @@ class MainActivity : AppCompatActivity() {
         // setContentView to custom created view FlyingFishView
         gameView = FlyingFishView(this, intent, sp)
         setContentView(gameView)
+
+        if (sp.getBoolean("soundOn", true)) {
+            player = MediaPlayer.create(this,  R.raw.music)
+        }
+        player?.isLooping = true
+        player?.setVolume(100f, 100f)
     }
 
     override fun onResume() {
         super.onResume()
         // instantly run the callback
         handler.post(runnable)
+        player?.start()
     }
 
     override fun onPause() {
         super.onPause()
         // remove callback if activity paused to prevent data leak
         handler.removeCallbacks(runnable)
+        player?.stop()
+        player?.release()
     }
 
     override fun onBackPressed() {
